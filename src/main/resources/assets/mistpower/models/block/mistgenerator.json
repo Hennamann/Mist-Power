@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "mistpower:blocks/mistgenerator",
+    "down": "mistpower:blocks/mistgenerator_top",
+    "up": "mistpower:blocks/mistgenerator_top",
+    "north": "mistpower:blocks/mistgenerator",
+    "east": "mistpower:blocks/mistgenerator",
+    "south": "mistpower:blocks/mistgenerator",
+    "west": "mistpower:blocks/mistgenerator"
+  }
+}

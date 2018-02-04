@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mistpower",
+  "name": "Mist Power",
+  "description": "Generate power from Mist",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://minecraft.henrikstabell.com",
+  "updateUrl": "",
+  "authorList": ["Hennamann"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
