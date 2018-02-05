@@ -23,7 +23,7 @@ public class MistPower {
 
     public static final String MODID = "mistpower";
     public static final String NAME = "Mist Power";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.1";
 
     @Mod.Instance(MODID)
     public static MistPower INSTANCE;

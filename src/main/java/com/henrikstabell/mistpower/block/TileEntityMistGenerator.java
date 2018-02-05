@@ -40,34 +40,31 @@ public class TileEntityMistGenerator extends TileEntity implements ITickable {
 
     @Override
     public void update() {
-        if(!world.isRemote)
-        {
-            if (mistCheckTick-- <= 0)
-            {
-                mistCheckTick = CHECK_MIST_DELAY + world.rand.nextInt(10);
-
+        if(!world.isRemote) {
+            if (mistCheckTick-- <= 0) {
                 BlockPos pos = getPos();
                 Biome biome = world.getBiome(pos);
-
                 isMistBiome = biome instanceof IBiomeMist;
+
+                if (isMistBiome) {
+                    int randInt = ((IBiomeMist) biome).getMistMultiplier(0);
+                    mistCheckTick = CHECK_MIST_DELAY + world.rand.nextInt(randInt);
+                }
             }
 
-            if (isMistBiome)
-            {
+            if (isMistBiome) {
                 createPower();
             }
 
-            if (powerStorage.getEnergyStored() > 0)
-            {
+            if (powerStorage.getEnergyStored() > 0) {
                 outputPower();
             }
         }
     }
 
-    protected void createPower()
-    {
-        if (mistCheckTick-- <= 0)
-        {
+    protected void createPower() {
+
+        if (mistCheckTick-- <= 0) {
             mistConsumeTick = CONSUME_MIST_DELAY + world.rand.nextInt(CONSUME_MIST_DELAY_RANDOM);
 
             BlockPos pos = getPos();
@@ -76,30 +73,29 @@ public class TileEntityMistGenerator extends TileEntity implements ITickable {
             if (biome instanceof IBiomeMist) {
                 powerStorage.receiveEnergy(POWER_CREATION, false);
             }
-            else
-            {
+            else {
                 return;
             }
         }
     }
 
-    protected void outputPower()
-    {
-        for (EnumFacing facing : EnumFacing.values())
-        {
+    protected void outputPower() {
+
+        for (EnumFacing facing : EnumFacing.values()) {
+
             BlockPos pos = getPos().add(facing.getDirectionVec());
 
-            if (world.isBlockLoaded(pos))
-            {
+            if (world.isBlockLoaded(pos)) {
+
                 TileEntity tile = world.getTileEntity(pos);
 
-                if (tile != null)
-                {
-                    if(tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite()))
-                    {
+                if (tile != null) {
+
+                    if(tile.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
+
                         IEnergyStorage storage = tile.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
-                        if (storage != null)
-                        {
+                        if (storage != null) {
+
                             int power = powerStorage.extractEnergy(Integer.MAX_VALUE, true);
 
                             int drained = storage.receiveEnergy(power, false);
@@ -113,24 +109,23 @@ public class TileEntityMistGenerator extends TileEntity implements ITickable {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound)
-    {
+    public void readFromNBT(NBTTagCompound compound) {
+
         super.readFromNBT(compound);
         compound.setInteger(NBT_ENERGY, powerStorage.getEnergyStored());
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound)
-    {
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+
         powerStorage.setEnergy(compound.getInteger(NBT_ENERGY));
         return super.writeToNBT(compound);
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
-    {
-        if (capability == CapabilityEnergy.ENERGY)
-        {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+
+        if (capability == CapabilityEnergy.ENERGY) {
             return powerStorage != null;
         }
         return super.hasCapability(capability, facing);
@@ -138,10 +133,9 @@ public class TileEntityMistGenerator extends TileEntity implements ITickable {
 
     @Override
     @Nullable
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
-    {
-        if (capability == CapabilityEnergy.ENERGY)
-        {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+
+        if (capability == CapabilityEnergy.ENERGY) {
             return (T) powerStorage;
         }
         return super.getCapability(capability, facing);
